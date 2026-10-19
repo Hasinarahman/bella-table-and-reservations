@@ -4,6 +4,7 @@ import hero from "@/assets/hero.jpg";
 import interior from "@/assets/interior.jpg";
 import dish1 from "@/assets/dish1.jpg";
 import dish2 from "@/assets/dish2.jpg";
+import { ReservationForm } from "@/components/ReservationForm";
 import { FoodMenu, MENU_ITEMS } from "@/components/FoodMenu";
 
 export const Route = createFileRoute("/")({
@@ -26,7 +27,7 @@ const NAV = [
 ] as const;
 
 
-type Reservation = { id: number; name: string; email: string; date: string; time: string; guests: string };
+type Reservation = { id: number; name: string; phone: string; date: string; time: string; guests: string };
 
 function Heading({ eyebrow, title, light }: { eyebrow: string; title: string; light?: boolean }) {
   return (
@@ -42,7 +43,6 @@ function Index() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [list, setList] = useState<Reservation[]>([]);
-  const [sent, setSent] = useState(false);
 
   useEffect(() => {
     const on = () => setScrolled(window.scrollY > 40);
@@ -54,17 +54,8 @@ function Index() {
 
   const save = (l: Reservation[]) => { setList(l); localStorage.setItem("bella-res", JSON.stringify(l)); };
 
-  const submit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const f = new FormData(e.currentTarget);
-    save([{ id: Date.now(), name: String(f.get("name")), email: String(f.get("email")), date: String(f.get("date")), time: String(f.get("time")), guests: String(f.get("guests")) }, ...list]);
-    e.currentTarget.reset();
-    setSent(true);
-    setTimeout(() => setSent(false), 4000);
-  };
 
   const guests = list.reduce((a, r) => a + Number(r.guests || 0), 0);
-  const input = "w-full rounded-md border border-cream/20 bg-cream/5 px-4 py-3 text-cream placeholder:text-cream/50 focus:border-gold focus:outline-none";
 
   return (
     <div className="font-sans">
@@ -165,17 +156,7 @@ function Index() {
         <div className="absolute inset-0 bg-forest/85" />
         <div className="relative mx-auto max-w-3xl px-6">
           <Heading eyebrow="Reserve Your Evening" title="Book a Table" light />
-          <form onSubmit={submit} className="grid gap-4 rounded-sm border border-gold/30 bg-forest/60 p-8 backdrop-blur md:grid-cols-2">
-            <input name="name" required placeholder="Full name" className={input} />
-            <input name="email" type="email" required placeholder="Email" className={input} />
-            <input name="date" type="date" required className={input} />
-            <input name="time" type="time" required className={input} />
-            <select name="guests" required className={`${input} md:col-span-2`} defaultValue="2">
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((g) => <option key={g} value={g} className="bg-forest">{g} {g === 1 ? "guest" : "guests"}</option>)}
-            </select>
-            <button className="rounded-sm bg-gold py-4 text-sm font-medium uppercase tracking-widest text-forest transition hover:bg-cream md:col-span-2">Reserve Now</button>
-            {sent && <p className="text-center text-gold md:col-span-2">Thank you! Your table is reserved.</p>}
-          </form>
+          <ReservationForm onSaved={(r) => save([{ id: Date.now(), name: r.name, phone: r.phone, date: r.date, time: r.time, guests: String(r.guests) }, ...list])} />
         </div>
       </section>
 
@@ -207,13 +188,13 @@ function Index() {
           <div className="overflow-x-auto rounded-sm border border-border bg-card">
             <table className="w-full text-left text-sm">
               <thead className="bg-muted text-xs uppercase tracking-widest text-muted-foreground">
-                <tr>{["Name", "Email", "Date", "Time", "Guests", ""].map((h) => <th key={h} className="px-5 py-4">{h}</th>)}</tr>
+                <tr>{["Name", "Phone", "Date", "Time", "Guests", ""].map((h) => <th key={h} className="px-5 py-4">{h}</th>)}</tr>
               </thead>
               <tbody>
                 {list.length === 0 && <tr><td colSpan={6} className="px-5 py-10 text-center text-muted-foreground">No reservations yet.</td></tr>}
                 {list.map((r) => (
                   <tr key={r.id} className="border-t border-border">
-                    <td className="px-5 py-4 font-medium text-primary">{r.name}</td><td className="px-5 py-4">{r.email}</td><td className="px-5 py-4">{r.date}</td><td className="px-5 py-4">{r.time}</td><td className="px-5 py-4">{r.guests}</td>
+                    <td className="px-5 py-4 font-medium text-primary">{r.name}</td><td className="px-5 py-4">{r.phone}</td><td className="px-5 py-4">{r.date}</td><td className="px-5 py-4">{r.time}</td><td className="px-5 py-4">{r.guests}</td>
                     <td className="px-5 py-4 text-right"><button onClick={() => save(list.filter((x) => x.id !== r.id))} className="text-xs uppercase tracking-widest text-destructive hover:underline">Cancel</button></td>
                   </tr>
                 ))}
