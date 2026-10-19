@@ -5,6 +5,7 @@ import interior from "@/assets/interior.jpg";
 import dish1 from "@/assets/dish1.jpg";
 import dish2 from "@/assets/dish2.jpg";
 import { ReservationForm } from "@/components/ReservationForm";
+import { AdminDashboard } from "@/components/AdminDashboard";
 import { FoodMenu, MENU_ITEMS } from "@/components/FoodMenu";
 
 export const Route = createFileRoute("/")({
@@ -27,7 +28,6 @@ const NAV = [
 ] as const;
 
 
-type Reservation = { id: number; name: string; phone: string; date: string; time: string; guests: string };
 
 function Heading({ eyebrow, title, light }: { eyebrow: string; title: string; light?: boolean }) {
   return (
@@ -42,20 +42,16 @@ function Heading({ eyebrow, title, light }: { eyebrow: string; title: string; li
 function Index() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [list, setList] = useState<Reservation[]>([]);
 
   useEffect(() => {
     const on = () => setScrolled(window.scrollY > 40);
     on();
     window.addEventListener("scroll", on);
-    setList(JSON.parse(localStorage.getItem("bella-res") || "[]"));
     return () => window.removeEventListener("scroll", on);
   }, []);
 
-  const save = (l: Reservation[]) => { setList(l); localStorage.setItem("bella-res", JSON.stringify(l)); };
 
 
-  const guests = list.reduce((a, r) => a + Number(r.guests || 0), 0);
 
   return (
     <div className="font-sans">
@@ -156,7 +152,7 @@ function Index() {
         <div className="absolute inset-0 bg-forest/85" />
         <div className="relative mx-auto max-w-3xl px-6">
           <Heading eyebrow="Reserve Your Evening" title="Book a Table" light />
-          <ReservationForm onSaved={(r) => save([{ id: Date.now(), name: r.name, phone: r.phone, date: r.date, time: r.time, guests: String(r.guests) }, ...list])} />
+          <ReservationForm onSaved={() => {}} />
         </div>
       </section>
 
@@ -180,27 +176,7 @@ function Index() {
       <section id="admin" className="bg-secondary py-24">
         <div className="mx-auto max-w-6xl px-6">
           <Heading eyebrow="Management" title="Admin Dashboard" />
-          <div className="mb-8 grid gap-6 sm:grid-cols-3">
-            {[["Reservations", list.length], ["Total Guests", guests], ["Menu Items", MENU_ITEMS.length]].map(([l, v]) => (
-              <div key={l} className="rounded-sm bg-primary p-6"><div className="text-xs uppercase tracking-widest text-cream/70">{l}</div><div className="mt-2 font-display text-5xl text-gold">{v}</div></div>
-            ))}
-          </div>
-          <div className="overflow-x-auto rounded-sm border border-border bg-card">
-            <table className="w-full text-left text-sm">
-              <thead className="bg-muted text-xs uppercase tracking-widest text-muted-foreground">
-                <tr>{["Name", "Phone", "Date", "Time", "Guests", ""].map((h) => <th key={h} className="px-5 py-4">{h}</th>)}</tr>
-              </thead>
-              <tbody>
-                {list.length === 0 && <tr><td colSpan={6} className="px-5 py-10 text-center text-muted-foreground">No reservations yet.</td></tr>}
-                {list.map((r) => (
-                  <tr key={r.id} className="border-t border-border">
-                    <td className="px-5 py-4 font-medium text-primary">{r.name}</td><td className="px-5 py-4">{r.phone}</td><td className="px-5 py-4">{r.date}</td><td className="px-5 py-4">{r.time}</td><td className="px-5 py-4">{r.guests}</td>
-                    <td className="px-5 py-4 text-right"><button onClick={() => save(list.filter((x) => x.id !== r.id))} className="text-xs uppercase tracking-widest text-destructive hover:underline">Cancel</button></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <AdminDashboard menuCount={MENU_ITEMS.length} />
         </div>
       </section>
 

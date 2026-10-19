@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 - Reservations are saved through a server function into the Lovable Cloud `reservations` table (public insert-only, no public read) — the platform runs on Workers, so Express/SQLite is not possible.
+- Admin access uses Lovable Cloud email auth + `user_roles`/`has_role`; the first account created is auto-granted admin by a trigger, and only admins can read/delete reservations via RLS.

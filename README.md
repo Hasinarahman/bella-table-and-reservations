@@ -1,29 +1,20 @@
-# Welcome to your Lovable project
+# Bella Restaurant
 
-This project was built with [Lovable](https://lovable.dev).
+Single-page restaurant website (menu, specials, reservations, admin dashboard).
 
-## Build with Lovable
+## Run locally
+1. Install [Bun](https://bun.sh) (or Node.js 20+).
+2. Download the project (GitHub sync or ZIP export from Lovable).
+3. In the project folder run:
+   ```
+   bun install
+   bun run dev
+   ```
+4. Open http://localhost:8080
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+The `.env` file already contains the Lovable Cloud connection, so the
+reservation form and admin dashboard work locally against the same database.
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
-```
-
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+## Admin dashboard
+Scroll to **Admin**, choose "Create the admin account", confirm the email,
+then sign in. The first account created becomes the admin.
