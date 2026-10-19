@@ -4,6 +4,7 @@ import hero from "@/assets/hero.jpg";
 import interior from "@/assets/interior.jpg";
 import dish1 from "@/assets/dish1.jpg";
 import dish2 from "@/assets/dish2.jpg";
+import { FoodMenu, MENU_ITEMS } from "@/components/FoodMenu";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -24,23 +25,6 @@ const NAV = [
   ["reservations", "Reservations"], ["contact", "Contact"], ["admin", "Admin"],
 ] as const;
 
-const MENU = {
-  Starters: [
-    ["Burrata & Heirloom Tomato", "Basil oil, aged balsamic", 14],
-    ["Beef Carpaccio", "Rocket, parmesan, capers", 16],
-    ["Seared Scallops", "Pea purée, crispy pancetta", 19],
-  ],
-  Mains: [
-    ["Truffle Risotto", "Black truffle, parmigiano", 28],
-    ["Ribeye Steak", "Roasted roots, thyme jus", 38],
-    ["Wild Sea Bass", "Lemon beurre blanc, fennel", 32],
-  ],
-  Desserts: [
-    ["Tiramisu Classico", "Mascarpone, espresso", 11],
-    ["Dark Chocolate Fondant", "Vanilla bean gelato", 12],
-    ["Lemon Panna Cotta", "Berry compote", 10],
-  ],
-} as const;
 
 type Reservation = { id: number; name: string; email: string; date: string; time: string; guests: string };
 
@@ -57,7 +41,6 @@ function Heading({ eyebrow, title, light }: { eyebrow: string; title: string; li
 function Index() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [tab, setTab] = useState<keyof typeof MENU>("Starters");
   const [list, setList] = useState<Reservation[]>([]);
   const [sent, setSent] = useState(false);
 
@@ -148,25 +131,9 @@ function Index() {
 
       {/* Menu */}
       <section id="menu" className="bg-secondary py-24">
-        <div className="mx-auto max-w-5xl px-6">
+        <div className="mx-auto max-w-6xl px-6">
           <Heading eyebrow="Taste the Season" title="Our Menu" />
-          <div className="mb-12 flex justify-center gap-3">
-            {(Object.keys(MENU) as (keyof typeof MENU)[]).map((k) => (
-              <button key={k} onClick={() => setTab(k)} className={`rounded-sm px-6 py-2 text-sm uppercase tracking-widest transition ${tab === k ? "bg-primary text-primary-foreground" : "text-primary hover:text-gold"}`}>{k}</button>
-            ))}
-          </div>
-          <div className="grid gap-6 md:grid-cols-2">
-            {MENU[tab].map(([n, d, p]) => (
-              <div key={n} className="rounded-sm border border-border bg-card p-6 transition hover:-translate-y-1 hover:border-gold hover:shadow-xl">
-                <div className="flex items-baseline gap-3">
-                  <h3 className="font-display text-2xl text-primary">{n}</h3>
-                  <span className="flex-1 border-b border-dashed border-border" />
-                  <span className="font-display text-2xl text-gold">${p}</span>
-                </div>
-                <p className="mt-2 text-sm text-muted-foreground">{d}</p>
-              </div>
-            ))}
-          </div>
+          <FoodMenu />
         </div>
       </section>
 
@@ -233,7 +200,7 @@ function Index() {
         <div className="mx-auto max-w-6xl px-6">
           <Heading eyebrow="Management" title="Admin Dashboard" />
           <div className="mb-8 grid gap-6 sm:grid-cols-3">
-            {[["Reservations", list.length], ["Total Guests", guests], ["Menu Items", Object.values(MENU).flat().length]].map(([l, v]) => (
+            {[["Reservations", list.length], ["Total Guests", guests], ["Menu Items", MENU_ITEMS.length]].map(([l, v]) => (
               <div key={l} className="rounded-sm bg-primary p-6"><div className="text-xs uppercase tracking-widest text-cream/70">{l}</div><div className="mt-2 font-display text-5xl text-gold">{v}</div></div>
             ))}
           </div>
