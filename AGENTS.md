@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Reservations are saved through a server function into the Lovable Cloud `reservations` table (public insert-only, no public read) — the platform runs on Workers, so Express/SQLite is not possible.
