@@ -4,7 +4,7 @@ Single-page restaurant website (menu, specials, reservations, admin dashboard).
 
 ## Run locally
 1. Install [Bun](https://bun.sh) (or Node.js 20+).
-2. Download the project (GitHub sync or ZIP export from Lovable).
+2. Download the project (GitHub sync or ZIP export ).
 3. In the project folder run:
    ```
    bun install
