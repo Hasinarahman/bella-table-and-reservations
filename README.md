@@ -18,3 +18,6 @@ reservation form and admin dashboard work locally against the same database.
 ## Admin dashboard
 Scroll to **Admin**, choose "Create the admin account", confirm the email,
 then sign in. The first account created becomes the admin.
+
+##link we can open on URL
+https://bella-table-and-reservations.vercel.app
